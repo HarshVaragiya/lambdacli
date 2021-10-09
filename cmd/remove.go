@@ -1,5 +1,5 @@
 /*
-Copyright © 2021 NAME HERE <EMAIL ADDRESS>
+Copyright © 2021 Harsh Varagiya <harsh8v@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 )
 
@@ -25,9 +23,20 @@ import (
 var removeCmd = &cobra.Command{
 	Use:   "remove",
 	Short: "remove a lambda function",
-	Long: `removes a lambda function on the LambdaFn application server`,
+	Long:  `removes a lambda function on the LambdaFn application server`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("remove called")
+		function := getLambdaFunction(cmd)
+		if err := validateFunctionBasics(function); err != nil {
+			log.Errorf("error validating function. error = %v", err)
+			return
+		}
+		client := newLambdaFnClient(serverUrl)
+		log.Infof("attempting to remove lambbda function [%s]", function.Name)
+		err := client.deleteLambda(function)
+		if err != nil {
+			log.Errorf("error deleting lambda function")
+		}
+		return
 	},
 }
 

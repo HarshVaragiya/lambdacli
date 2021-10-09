@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "github.com/HarshVaragiya/LambdaFn/cli/cmd"
+import "github.com/HarshVaragiya/lambdacli/cmd"
 
 func main() {
 	cmd.Execute()

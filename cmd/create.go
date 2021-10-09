@@ -1,5 +1,5 @@
 /*
-Copyright © 2021 NAME HERE <EMAIL ADDRESS>
+Copyright © 2021 Harsh Varagiya <harsh8v@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -23,19 +23,20 @@ import (
 var createCmd = &cobra.Command{
 	Use:   "create",
 	Short: "create lambda function on the LambdaFn application server",
-	Long: `creating lambda function on the LambdaFn application server`,
-	RunE: func(cmd *cobra.Command, args []string) error {
+	Long:  `creating lambda function on the LambdaFn application server`,
+	Run: func(cmd *cobra.Command, args []string) {
 		function := getLambdaFunction(cmd)
-		if err := ValidateCreateLambda(function); err != nil {
+		if err := validateCreateLambda(function); err != nil {
 			log.Errorf("error validating create request. error = %v", err)
-			return err
+			return
 		}
 		client := newLambdaFnClient(serverUrl)
+		log.Infof("attempting to create lambda function [%s]", function.Name)
 		err := client.createLambdaFunction(function)
 		if err != nil {
-			log.Errorf("error creating lambda function. error = %v", err)
+			log.Errorf("error creating lambda function")
 		}
-		return err
+		return
 	},
 }
 

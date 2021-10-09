@@ -1,4 +1,4 @@
-module lambdacli
+module github.com/HarshVaragiya/lambdacli
 
 go 1.16
 

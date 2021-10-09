@@ -49,15 +49,18 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&serverUrl, "server", "http://127.0.0.1:8080","LambdaFn Application Server Base URL")
-	rootCmd.PersistentFlags().BoolVarP(&debug,"debug","v", false, "enabled debug and trace messages")
+	rootCmd.PersistentFlags().StringVar(&serverUrl, "server", "http://127.0.0.1:8080", "LambdaFn Application Server Base URL")
+	rootCmd.PersistentFlags().BoolVarP(&debug, "debug", "v", false, "enabled debug and trace messages")
 
-	rootCmd.PersistentFlags().StringP("function-name","n","lambda","lambda function name")
-	rootCmd.PersistentFlags().StringP("description","d","","lambda function description")
-	rootCmd.PersistentFlags().StringP("code-uri","c","","location of code URI on disk (absolute path)")
-	rootCmd.PersistentFlags().String("handler","lambda_function.lambda_handler","lambda handler")
-	rootCmd.PersistentFlags().String("timeout","3s","lambda function timeout")
-	rootCmd.PersistentFlags().String("runtime","python3","lambda runtime")
+	rootCmd.PersistentFlags().StringP("name", "n", "lambda", "lambda function name")
+	rootCmd.PersistentFlags().StringP("description", "d", "", "lambda function description")
+	rootCmd.PersistentFlags().StringP("code-uri", "c", "", "location of code URI on disk (absolute path)")
+	rootCmd.PersistentFlags().String("handler", "lambda_function.lambda_handler", "lambda handler")
+	rootCmd.PersistentFlags().String("timeout", "3s", "lambda function timeout")
+	rootCmd.PersistentFlags().String("runtime", "python3", "lambda runtime")
+
+	rootCmd.PersistentFlags().String("event", "", "lambda event data")
+	rootCmd.PersistentFlags().String("context", "", "lambda event context")
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.lambdacli.toml)")
 }

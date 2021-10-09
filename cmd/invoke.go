@@ -1,5 +1,5 @@
 /*
-Copyright © 2021 NAME HERE <EMAIL ADDRESS>
+Copyright © 2021 Harsh Varagiya <harsh8v@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -16,18 +16,33 @@ limitations under the License.
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
+	"time"
 )
 
 // invokeCmd represents the invoke command
 var invokeCmd = &cobra.Command{
 	Use:   "invoke",
 	Short: "invoke a LambdaFn function",
-	Long: `invoke a LambdaFn function on the application server`,
+	Long:  `invoke a LambdaFn function on the application server`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("invoke called")
+		function := getLambdaFunction(cmd)
+		event := getLambdaEvent(cmd)
+		if err := validateFunctionBasics(function); err != nil {
+			log.Errorf("error validating create request. error = %v", err)
+			return
+		}
+		if err := validateEventBasics(event); err != nil {
+			log.Warnf("event looks invalid. proceeding in 5 seconds. error = %v", err)
+			time.Sleep(time.Second * 5)
+		}
+		client := newLambdaFnClient(serverUrl)
+		log.Infof("invoking lambda function [%s]", function.Name)
+		err := client.invokeLambda(function, event)
+		if err != nil {
+			log.Errorf("error invoking lambda function")
+		}
+		return
 	},
 }
 
